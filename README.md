@@ -59,3 +59,14 @@ MySQL
 ## Files
 
 - [`schema_and_queries.sql`](./schema_and_queries.sql) — table creation, sample data, and all queries
+
+###  Query Execution & Results
+
+#### 1. Database Creation & Schema Setup
+![Database Setup](./schema_creation_and_inserts.sql.png)
+
+#### 2. Top Active Users Analysis
+![Top Users](./resultat_top_users.png)
+
+#### 3. Trending Hashtags Query
+![Popular Hashtags](./resultat_popular_hashtags.png)
