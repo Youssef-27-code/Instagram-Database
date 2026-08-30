@@ -52,8 +52,3 @@ FROM users
 JOIN likes ON users.id = likes.user_id 
 GROUP BY likes.user_id 
 HAVING total_likes = (SELECT COUNT(*) FROM photos);
-
-
- Tech Stack & Tools
-Database Management System: MySQL
-Tool: MySQL Workbench 
