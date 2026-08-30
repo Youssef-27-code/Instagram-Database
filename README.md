@@ -1,54 +1,61 @@
-#  Instagram Database Schema & SQL Analysis
+# Instagram Database Clone — SQL Project
 
-A comprehensive relational database design and analytical SQL query suite modeled after Instagram's core functionality. This project demonstrates database normalization, primary/foreign key relationships, and complex query solving for business insights.
+A relational database inspired by Instagram, built with MySQL. The goal was to practice database design (relationships, normalization) and writing SQL queries to answer real analytical questions.
 
----
+## Database Structure
 
-##  Database Schema & Architecture
+The database has 6 tables:
 
-The database models key interactions within a social media platform and consists of 6 main tables:
+- **users** — user profiles and registration dates
+- **photos** — photos, linked to the user who posted them
+- **comments** — comments left by users on photos
+- **likes** — join table tracking which users liked which photos
+- **follows** — join table tracking which users follow which other users
+- **tags** and **photo_tags** — hashtags, linked to photos through a join table
 
-* **Users:** User profiles and registration dates.
-* **Photos:** Image metadata linked to the posting user.
-* **Comments:** User comments on specific photos.
-* **Likes:** Track interactions (Many-to-Many relationship between Users and Photos).
-* **Follows:** User follow/unfollow relationships (Self-referencing Many-to-Many).
-* **Tags & Photo_Tags:** Hashtag implementation allowing many-to-many associations between photos and tags.
+## Relationships
 
----
+- **One-to-Many**
+  - a user can post many photos
+  - a photo can have many comments
+- **Many-to-Many**
+  - users and photos, through `likes`
+  - users and users, through `follows` (a user can follow many users, and be followed by many users)
+  - photos and tags, through `photo_tags`
 
-##  Entity Relationships (ER Summary)
+## Example queries
 
-* **One-to-Many (1:N):** 
-  - `Users` ➔ `Photos` (A user can post multiple photos).
-  - `Photos` ➔ `Comments` (A photo can have multiple comments).
-* **Many-to-Many (M:N):** 
-  - `Users` ➔ `Photos` (via `likes` join table).
-  - `Users` ➔ `Users` (via `follows` join table for user connections).
-  - `Photos` ➔ `Tags` (via `photo_tags` join table).
-
----
-
-##  Business Logic & Key SQL Queries
-
-Below are examples of analytical SQL queries implemented in the project:
-
-### 1. Identifying Oldest Users (Reward Loyal Accounts)
+**1. Find the oldest user accounts**
 ```sql
-SELECT username, created_at 
-FROM users 
-ORDER BY created_at ASC 
+SELECT username, created_at
+FROM users
+ORDER BY created_at ASC
 LIMIT 5;
+```
 
+**2. Find the most used tags**
+```sql
 SELECT tags.tag_name, COUNT(*) AS total_usage
 FROM photo_tags
 JOIN tags ON photo_tags.tag_id = tags.id
 GROUP BY tags.id
 ORDER BY total_usage DESC
 LIMIT 5;
+```
 
-SELECT username, COUNT(*) AS total_likes 
-FROM users 
-JOIN likes ON users.id = likes.user_id 
-GROUP BY likes.user_id 
+**3. Find users who liked every single photo on the platform**
+```sql
+SELECT username, COUNT(*) AS total_likes
+FROM users
+JOIN likes ON users.id = likes.user_id
+GROUP BY likes.user_id
 HAVING total_likes = (SELECT COUNT(*) FROM photos);
+```
+
+## Tools
+
+MySQL
+
+## Files
+
+- [`schema_and_queries.sql`](./schema_and_queries.sql) — table creation, sample data, and all queries
